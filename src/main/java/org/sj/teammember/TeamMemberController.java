@@ -33,7 +33,7 @@ public class TeamMemberController {
 TeamMemberRepo repo;
 	@PostMapping("/addUser")
 	public TeamMember addUser(@Valid @RequestBody TeamMember user) {
-		log.info("Received user for saving {0}",user);
+		log.info("Received user for saving ",user);
 		TeamMember savedUser=repo.save(user);
 		return savedUser;
 	}
@@ -64,3 +64,5 @@ TeamMemberRepo repo;
 	
 	
 }
+
+
