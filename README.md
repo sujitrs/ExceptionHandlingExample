@@ -13,6 +13,7 @@
 
 +	For **Get Multiple Records** use HTTP Method `GET`
 
+
 ### HTTP Response Code and REST Action Mapping (Success)
 
 | **_**        | **_** | **SYNC Resp. Body** | **ASYNC  No Resp. Body** | **SYNC No Resp. Body  (File Upload)** |
@@ -32,3 +33,15 @@
 | Update       | Y             | Y                            | Version Conflict                | Y          | Y             | Y                      | Y                  | Y                          |
 | Get Single   | Y             | Y                            | N                               | Y          | Y             | Y                      | Y                  | Y                          |
 | Get Multiple | N             | Y                            | N                               | Y          | Y             | Y                      | Y                  | Y                          |
+
+
+### Two Options using @ControllerAdvice
+
+1.	Return Response Entity {HTTP Response Code with Response Body}. Can be used for internal Microservices implementation.
+2.	Return ONLY HTTP Response Code : To be used for all exceptions except for BAD_REQUEST_400. Can be used for all Internet Centric Microservices Implementation.
+
+### What’s next ?
+
+In Next Version of guideline document, VND Errors for HTTP 400 details will be published
+
+
