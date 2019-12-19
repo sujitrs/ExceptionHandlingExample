@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,12 +32,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class TeamMemberController {
 @Autowired
 TeamMemberRepo repo;
-	@PostMapping("/addUser")
-	public TeamMember addUser(@Valid @RequestBody TeamMember user) {
-		log.info("Received user for saving ",user);
+
+	
+@PostMapping("/addUser")
+
+		public TeamMember addUser(@Valid @RequestBody TeamMember user) {
+			if (repo.findByEmailID(user.getEmailID()).isPresent()) {
+		        throw new TeamMemberEmailIDAlreadyExistsException(user.getEmailID());
+		    }
+
+		log.info("Received user for saving {} ",user);
 		TeamMember savedUser=repo.save(user);
 		return savedUser;
-	}
+		}
 	
 	@GetMapping("/getUser/{id}")
 	public TeamMember getUser(@PathVariable (value="id") UUID id) {
