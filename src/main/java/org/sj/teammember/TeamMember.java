@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
@@ -33,7 +35,7 @@ public class TeamMember {
 	private UUID id;
 	
 	@NotNull
-	@Size(min = 5, max = 14)
+	@Size(min = 5, max = 14,message = "Name must be of size ")
 	private String name;
 	
 	@NotNull
@@ -54,4 +56,7 @@ public class TeamMember {
 	@Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+	
+	@Version
+    private int version;
 }
