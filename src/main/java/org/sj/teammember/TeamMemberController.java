@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import ch.qos.logback.classic.Logger;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +48,11 @@ TeamMemberRepo repo;
 		public ResponseEntity addUser(@Valid @RequestBody TeamMember user, BindingResult result, Model model) {
 	
 	
-	if (result.hasErrors()) {
-        List<String> errors = result.getAllErrors().stream()
-          .map(DefaultMessageSourceResolvable::getDefaultMessage)
-          .collect(Collectors.toList());
-        return new ResponseEntity<>(errors, HttpStatus.OK);
-    }
+			if (result.hasErrors()) {
+		        List<ObjectError> errors = result.getAllErrors();
+
+		        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+		    }
 	
 	
 			if (repo.findByEmailID(user.getEmailID()).isPresent()) {

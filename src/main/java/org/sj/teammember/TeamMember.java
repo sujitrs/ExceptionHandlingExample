@@ -35,7 +35,7 @@ public class TeamMember {
 	private UUID id;
 	
 	@NotNull
-	@Size(min = 5, max = 14,message = "Name must be of size ")
+	@Size(min = 5, max = 14)
 	private String name;
 	
 	@NotNull
@@ -46,6 +46,7 @@ public class TeamMember {
 	@Size(min = 5, max = 14)
 	private String reporting;
 	
+	@NotNull
 	@Email
 	private String emailID;
 	
