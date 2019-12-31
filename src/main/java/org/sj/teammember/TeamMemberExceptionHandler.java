@@ -21,7 +21,7 @@ import java.net.ConnectException;
 import java.sql.SQLException;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.hateoas.mediatype.vnderrors.VndErrors;
+
 
 
 
@@ -37,63 +37,67 @@ public class TeamMemberExceptionHandler {
 		 */
 		
 		
-		  private ResponseEntity<String> error(HttpStatus status, Exception e) {
-		  log.error("Exception : ", e); return ResponseEntity.status(status).
-		  body("Server is busy, please try after some time");
-		  
-		  }
-		  
-		  
-		  @ExceptionHandler({RuntimeException.class})
-		  
-		  public ResponseEntity<String> handleRunTimeException(RuntimeException e) {
-		  
-		  return error(INTERNAL_SERVER_ERROR, e);
-		  
-		  }
-		  
-		  @ExceptionHandler({HttpMessageNotReadableException.class})
-		  
-		  public ResponseEntity<String>
-		  handleRunTimeException(HttpMessageNotReadableException e) {
-		  
-		  return error(HttpStatus.BAD_REQUEST, e);
-		  
-		  }
-		  
-		  
-		  
-		  
-		  @ExceptionHandler({TeamMemberNotFoundException.class})
-		  
-		  public ResponseEntity<String>
-		  handleNotFoundException(TeamMemberNotFoundException e) {
-		  
-		  return error(NOT_FOUND, e);
-		  
-		  }
-		  
-		  
-		  
-		  @ExceptionHandler({DataIntegrityViolationException.class})
-		  
-		  public ResponseEntity<String>
-		  handleNotFoundException(DataIntegrityViolationException e) { return
-		  error(HttpStatus.CONFLICT, e);
-		  
-		  }
-		 
-		  
-		  @ResponseBody
-		    @ExceptionHandler(TeamMemberEmailIDAlreadyExistsException.class)
-
-		    @ResponseStatus(HttpStatus.CONFLICT)
-
-		    VndErrors teamMemberAlreadyExistsExceptionHandler(TeamMemberEmailIDAlreadyExistsException ex) {
-
-		        return new VndErrors("error", ex.getMessage());
-
-		    }
+	/*
+	 * private ResponseEntity<String> error(HttpStatus status, Exception e) {
+	 * log.error("Exception : ", e); return ResponseEntity.status(status).
+	 * body("Server is busy, please try after some time");
+	 * 
+	 * }
+	 * 
+	 * 
+	 * @ExceptionHandler({RuntimeException.class})
+	 * 
+	 * public ResponseEntity<String> handleRunTimeException(RuntimeException e) {
+	 * 
+	 * return error(INTERNAL_SERVER_ERROR, e);
+	 * 
+	 * }
+	 * 
+	 * @ExceptionHandler({HttpMessageNotReadableException.class})
+	 * 
+	 * public ResponseEntity<String>
+	 * handleRunTimeException(HttpMessageNotReadableException e) {
+	 * 
+	 * return error(HttpStatus.BAD_REQUEST, e);
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @ExceptionHandler({TeamMemberNotFoundException.class})
+	 * 
+	 * public ResponseEntity<String>
+	 * handleNotFoundException(TeamMemberNotFoundException e) {
+	 * 
+	 * return error(NOT_FOUND, e);
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 * @ExceptionHandler({DataIntegrityViolationException.class})
+	 * 
+	 * public ResponseEntity<String>
+	 * handleNotFoundException(DataIntegrityViolationException e) { return
+	 * error(HttpStatus.CONFLICT, e);
+	 * 
+	 * }
+	 * 
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @ExceptionHandler(TeamMemberEmailIDAlreadyExistsException.class)
+	 * 
+	 * @ResponseStatus(HttpStatus.CONFLICT)
+	 * 
+	 * VndErrors teamMemberAlreadyExistsExceptionHandler(
+	 * TeamMemberEmailIDAlreadyExistsException ex) {
+	 * 
+	 * return new VndErrors("error", ex.getMessage());
+	 * 
+	 * }
+	 */
 		 
 	 /*
 	 * Option 2 to handle more than one exception; it should be used if you DO NOT wish to communicate the error message separately in response entity; it uses only HTTP response status
@@ -102,37 +106,43 @@ public class TeamMemberExceptionHandler {
 	 * - You cannot have any text message as response
 	 * 
 	 */
+	
 	/*
 	 * @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	 * 
-	 * @ExceptionHandler({CannotCreateTransactionException.class,
-	 * SQLException.class, NullPointerException.class,ConnectException.class})
-	 * public void handle(Exception ex) {
+	 * @ExceptionHandler({//CannotCreateTransactionException.class
+	 * //,SQLException.class RuntimeException.class //,ConnectException.class })
+	 * public void handle(RuntimeException ex) {
 	 * log.error("INTERNAL_SERVER_ERROR Exception =",ex);//Prints Stack Trace }
-	 * 
-	 * @ResponseStatus(HttpStatus.CONFLICT)
-	 * 
-	 * @ExceptionHandler({DataIntegrityViolationException.class}) public void
-	 * handle(DataIntegrityViolationException ex) {
-	 * log.debug("CONFLICT Business Exception =",ex); // Not an error. Since its a
-	 * business exception. It is not required to logged at error level. This log
-	 * prints Stack Trace }
-	 * 
-	 * @ResponseStatus(HttpStatus.NOT_FOUND)
-	 * 
-	 * @ExceptionHandler({TeamMemberNotFoundException.class}) public void
-	 * handle(TeamMemberNotFoundException e) {
-	 * log.debug("NOT_FOUND TeamMemberNotFoundException =",e); // Not an error.
-	 * Since its a business exception. It is not required to logged at error
-	 * level.This log prints Stack Trace }
-	 * 
-	 * @ResponseStatus(HttpStatus.BAD_REQUEST)
-	 * 
-	 * @ExceptionHandler({HttpMessageNotReadableException.class}) public void
-	 * handle(HttpMessageNotReadableException e) {
-	 * log.error("BAD_REQUEST Exception =",e); }
 	 */
-		  
+	  
+	  @ResponseStatus(HttpStatus.CONFLICT)
+	  @ExceptionHandler({DataIntegrityViolationException.class}) 
+	  public void  handle(DataIntegrityViolationException ex) {
+	  log.error("CONFLICT Business Exception =",ex); // Not an error. Since its a 	  business exception. It is not required to logged at error level. This log 	  prints Stack Trace 
+	  }
+	  
+	  @ResponseStatus(HttpStatus.NOT_FOUND)
+	  
+	  @ExceptionHandler({TeamMemberNotFoundException.class}) public void
+	  handle(TeamMemberNotFoundException e) {
+	  log.error("NOT_FOUND TeamMemberNotFoundException =",e); // Not an error.	  Since its a business exception. It is not required to logged at error	  level.This log prints Stack Trace 
+	  }
+	  
+	  @ResponseStatus(HttpStatus.BAD_REQUEST)
+	  
+	  @ExceptionHandler({HttpMessageNotReadableException.class}) public void
+	  handle(HttpMessageNotReadableException e) {
+	  log.error("BAD_REQUEST Exception =",e); }
 	 
-	
+	  @ResponseStatus(HttpStatus.BAD_REQUEST)
+	  @ExceptionHandler({TeamMemberFieldValidationException.class}) public void
+	  handle(TeamMemberFieldValidationException e) {
+	  log.error("BAD_REQUEST Exception =",e); }
+	 
+	  @ResponseStatus(HttpStatus.BAD_REQUEST)
+	  @ExceptionHandler({javax.validation.ConstraintViolationException.class}) public void
+	  handle(javax.validation.ConstraintViolationException e) {
+	  log.error("BAD_REQUEST Exception =",e); }
+	  
 }

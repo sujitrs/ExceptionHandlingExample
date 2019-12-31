@@ -50,8 +50,8 @@ TeamMemberRepo repo;
 	
 			if (result.hasErrors()) {
 		        List<ObjectError> errors = result.getAllErrors();
-
-		        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+		        new TeamMemberFieldValidationException();
+		        
 		    }
 	
 	
