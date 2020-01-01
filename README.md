@@ -26,7 +26,7 @@
 
 ### HTTP Response Code and REST Action Mapping (Failure)
 
-| **_**        | **NOT Found** | **BAD Request (VNDR.ERROR)** | **Conflict (Versioning Issue)** | **UnAuth** | **Forbidden** | **Method Not Allowed** | **Gone(Archival)** | **Server Side  Exception** |
+| **_**        | **NOT Found** | **BAD Request ** | **Conflict (Versioning Issue)** | **UnAuth** | **Forbidden** | **Method Not Allowed** | **Gone(Archival)** | **Server Side  Exception** |
 |:------------:|:-------------:|:----------------------------:|:-------------------------------:|:----------:|:-------------:|:----------------------:|:------------------:|:--------------------------:|
 | \_           | 404           | 400                          | 409                             | 401        | 403           | 405                    | 410                | 500                        |
 | Create       | N             | Y                            | Duplicate Record                | Y          | Y             | Y                      | N                  | Y                          |
