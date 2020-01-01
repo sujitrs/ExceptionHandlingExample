@@ -1,5 +1,10 @@
-package org.sj.teammember;
+package controller;
 
+import org.sj.teammember.entities.TeamMember;
+import org.sj.teammember.exception.TeamMemberEmailIDAlreadyExistsException;
+import org.sj.teammember.exception.TeamMemberFieldValidationException;
+import org.sj.teammember.exception.TeamMemberNotFoundException;
+import org.sj.teammember.repo.TeamMemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +27,7 @@ import java.util.stream.Collectors;
 import ch.qos.logback.classic.Logger;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
-
+import utils.Util;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +40,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")/* @TODO rethink */
 @Slf4j
 
 public class TeamMemberController {
@@ -45,45 +50,51 @@ TeamMemberRepo repo;
 	
 @PostMapping("/addUser")
 
-		public ResponseEntity addUser(@Valid @RequestBody TeamMember user, BindingResult result, Model model) {
+		public ResponseEntity addUser(@Valid @RequestBody TeamMember user, BindingResult result, Model model) throws TeamMemberFieldValidationException,TeamMemberEmailIDAlreadyExistsException {
 	
-	
+		// Check if bean validation is successful
+		log.debug("Checking if bean validation is successful for {} ",user);
 			if (result.hasErrors()) {
+				log.debug("Bean validation failed for {} ",user);
 		        List<ObjectError> errors = result.getAllErrors();
-
-		        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+		        log.debug("Throwing  TeamMemberFieldValidationException for {} ",user);
+		        throw new TeamMemberFieldValidationException(Util.getError(errors));
 		    }
-	
-	
+
+		// Check if duplicate record is getting inserted
+		log.debug("Check if duplicate record is getting inserted for {} ",user);
 			if (repo.findByEmailID(user.getEmailID()).isPresent()) {
+				log.debug("Duplicate emailID found for {} ",user);
 		        throw new TeamMemberEmailIDAlreadyExistsException(user.getEmailID());
 		    }
-
-		log.info("Received user for saving {} ",user);
+		
+		log.debug("Saving {} ",user);
 		TeamMember savedUser=repo.save(user);
+		log.debug("Record Saved =>{} ",user);
 		return new ResponseEntity<>(savedUser,HttpStatus.OK);
 		}
 	
 	@GetMapping("/getUser/{id}")
 	public TeamMember getUser(@PathVariable (value="id") UUID id) {
-		log.info("Get user {}",id);
-		return repo.findById(id).orElseThrow(()->new TeamMemberNotFoundException());
+		log.debug("Get user {}",id);
+		return repo.findById(id).orElseThrow(()->new TeamMemberNotFoundException("Team Member ", "ID", (Object)id));
 	}
 	
 	@GetMapping("/getAllUsers")
 	@ResponseBody
 	public List<TeamMember> getAllUsers() {
-		log.info("Get All Users" );
+		log.debug("Get All Users" );
 		return (List<TeamMember>) repo.findAll();
 	}
 	
 	
 	@PatchMapping("/updateUser/{id}")
 	public TeamMember updateUser(@PathVariable (value="id") UUID id, @RequestBody TeamMember receivedUser) {
-		log.info("Update User with ID {0} and details as {1}",new Object[] {id, receivedUser});
-		TeamMember savedUser=repo.findById(id).orElseThrow(()->new TeamMemberNotFoundException());
+		log.debug("Update User with ID {} and details as {}",new Object[] {id, receivedUser});
+		TeamMember savedUser=repo.findById(id).orElseThrow(()->new TeamMemberNotFoundException("Team Member ", "ID", (Object)id));
 		savedUser.setEmailID(receivedUser.getEmailID());
 		savedUser.setName(receivedUser.getName());
+		savedUser.setVersion(receivedUser.getVersion());
 		repo.save(savedUser);
 		return savedUser;
 	}

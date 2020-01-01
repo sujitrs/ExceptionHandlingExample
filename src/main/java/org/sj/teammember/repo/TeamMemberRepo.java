@@ -1,7 +1,8 @@
-package org.sj.teammember;
+package org.sj.teammember.repo;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.sj.teammember.entities.TeamMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 /**

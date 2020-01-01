@@ -145,8 +145,20 @@ public class TeamMemberExceptionHandler {
 
 
 
-### What’s next ?
+### Important Points to NOTE
 
-In Next Version of guideline document, VND Errors for HTTP 400 details will be published
++	For non-business exceptions, one should log stack trace in log file at ```ERROR``` level
++	For business exceptions, one should not log stack trace in log file, but should log the business exception details at ```DEBUG``` level in log file
++	This project can be used as template for CRU for one entity
+
+### What's next
+
++	Composite Bean : Bean object being part of another bean as attribute member
++	Pagination and Sorting
++	Which one is better - bean validation or JSON Schema Parsing ?
++	OAuth implementation
+
+
+
 
 
