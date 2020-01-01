@@ -1,4 +1,4 @@
-package org.sj.teammember;
+package org.sj.teammember.exception;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -107,42 +107,48 @@ public class TeamMemberExceptionHandler {
 	 * 
 	 */
 	
-	/*
-	 * @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-	 * 
-	 * @ExceptionHandler({//CannotCreateTransactionException.class
-	 * //,SQLException.class RuntimeException.class //,ConnectException.class })
-	 * public void handle(RuntimeException ex) {
-	 * log.error("INTERNAL_SERVER_ERROR Exception =",ex);//Prints Stack Trace }
-	 */
+	
+	 
+	 // Stack Trace Printing not required
 	  
 	  @ResponseStatus(HttpStatus.CONFLICT)
-	  @ExceptionHandler({DataIntegrityViolationException.class}) 
-	  public void  handle(DataIntegrityViolationException ex) {
-	  log.error("CONFLICT Business Exception =",ex); // Not an error. Since its a 	  business exception. It is not required to logged at error level. This log 	  prints Stack Trace 
+	  @ExceptionHandler({org.springframework.orm.ObjectOptimisticLockingFailureException.class}) 
+	  public void  handle(org.springframework.orm.ObjectOptimisticLockingFailureException ex) {
+		  log.debug("CONFLICT Business Exception"); // Not an error. Since its a 	  business exception. It is not required to logged at error level. This log 	  prints Stack Trace 
 	  }
 	  
 	  @ResponseStatus(HttpStatus.NOT_FOUND)
 	  
 	  @ExceptionHandler({TeamMemberNotFoundException.class}) public void
-	  handle(TeamMemberNotFoundException e) {
-	  log.error("NOT_FOUND TeamMemberNotFoundException =",e); // Not an error.	  Since its a business exception. It is not required to logged at error	  level.This log prints Stack Trace 
+	  handle(TeamMemberNotFoundException e) {// No need to print stack trace
+		  log.debug("NOT_FOUND TeamMemberNotFoundException"); // Not an error.	  Since its a business exception. It is not required to logged at error	  level.This log prints Stack Trace 
 	  }
 	  
 	  @ResponseStatus(HttpStatus.BAD_REQUEST)
-	  
-	  @ExceptionHandler({HttpMessageNotReadableException.class}) public void
-	  handle(HttpMessageNotReadableException e) {
-	  log.error("BAD_REQUEST Exception =",e); }
-	 
-	  @ResponseStatus(HttpStatus.BAD_REQUEST)
 	  @ExceptionHandler({TeamMemberFieldValidationException.class}) public void
 	  handle(TeamMemberFieldValidationException e) {
-	  log.error("BAD_REQUEST Exception =",e); }
+		  log.debug("Field Level Validation Failed"); } // No need to print stack trace
 	 
+	  
+	  @ResponseStatus(HttpStatus.CONFLICT)
+	  @ExceptionHandler({TeamMemberEmailIDAlreadyExistsException.class}) public void
+	  handle(TeamMemberEmailIDAlreadyExistsException e) {
+		  log.debug("DUPLICATE_FOUND Team Member Email ID already exists"); } // No need to print stack trace
+
+
+	 // Stack Trace Printing required
+	  
 	  @ResponseStatus(HttpStatus.BAD_REQUEST)
-	  @ExceptionHandler({javax.validation.ConstraintViolationException.class}) public void
-	  handle(javax.validation.ConstraintViolationException e) {
-	  log.error("BAD_REQUEST Exception =",e); }
+	  @ExceptionHandler({HttpMessageNotReadableException.class}) public void
+	  handle(HttpMessageNotReadableException e) {
+		  log.error("BAD_REQUEST :: Message not readable Exception =",e); } //Prints stack trace
+	  
+	  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	  @ExceptionHandler({CannotCreateTransactionException.class,SQLException.class ,RuntimeException.class ,ConnectException.class })
+	  public void handle(RuntimeException ex) {
+	  log.error("INTERNAL_SERVER_ERROR Exception =",ex);//Prints Stack Trace 
+	  }
+	 
+	  	  
 	  
 }
